@@ -27,6 +27,7 @@ type game_state = {
   bricks : Brick.brick list list;
   paddle : Paddle.paddle;
   ball : Ball.ball;
+  score : int;
 }
 
 
@@ -39,7 +40,7 @@ let draw_state (state : game_state) =
     
   let _, posM = get_click_position () in
   let new_brick = Brick.update_brick_lines posM bricks in *)
-  let score = Brick.nbBricks bricks in
+  let score = state.score in
   Graphics.moveto 10 10;  (* Déplace le pointeur en bas à gauche *)
   Graphics.draw_string ("Score: " ^ (string_of_int score));
   Brick.draw_brick_lines bricks;
@@ -50,13 +51,16 @@ let draw_state (state : game_state) =
 
 
 
-  let update_game (game : game_state) =
-    let ball =  game.ball in
-    let paddle = game.paddle in
+let update_game (game : game_state) =
+    let ball, paddle, bricks =  game.ball, game.paddle, game.bricks in
+    let (xb,yb) = Ball.get_position ball in
+    let new_bricks = Brick.update_brick_lines (xb,yb) bricks in
     let new_ball = Ball.updateBall ball Init.dt in
     let (x,_) = Graphics.mouse_pos () in
     let new_paddle = Paddle.updatePadle paddle (float_of_int(x),true) in
-    { game with ball = new_ball ; paddle = new_paddle}
+    let subScore = Brick.nbBricks bricks - Brick.nbBricks new_bricks in
+    let new_score =  game.score + subScore in
+    {  ball = new_ball ; paddle = new_paddle; bricks = new_bricks; score = new_score}
 
     
   let rec loop game flux_etat =
@@ -89,10 +93,12 @@ let () =
   let coloRball = Graphics.red in
   let paddleInit = Paddle.create (300.,60.) (90.,20.) coloRpadle in
   let ballInit = Ball.create (300.,150.) 5. coloRball Normal (0.4,0.5) in
+  let scoreInit = 0 in
   
   let initial_state : game_state = { bricks = Brick.generate_brick_lines posd posM coleR;
   paddle = paddleInit;
-  ball = ballInit } in
+  ball = ballInit;
+  score = scoreInit } in
 
   let flux_etat = Flux.unfold (fun state -> Some (state, update_game state)) initial_state in
   

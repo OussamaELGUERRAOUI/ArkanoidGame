@@ -28,6 +28,11 @@ sig
   val update_brick_lines : (t * t) -> brick list list -> brick list list
 
   val nbBricks : brick list list -> int
+
+  val update_brick : (t * t) -> brick list  -> brick list 
+
+  val update_bricks : (t * t) -> brick list list -> brick list list
+
 end
 
 module Brick : Brick =
@@ -107,4 +112,17 @@ struct
 
     let nbBricks brick_lines =
       List.fold_left (fun acc brick_line -> acc + List.length brick_line) 0 brick_lines
+
+    let rec update_brick (x,y) brick_line =
+      match brick_line with
+      | [] -> []
+      | b :: q -> 
+       ( if is_position_inside_brick (x,y) b then
+         update_brick (x,y) q
+        else
+          b :: update_brick (x,y) q)
+
+    
+    let update_bricks (x,y) brick_lines =
+     List.map (update_brick (x,y)) brick_lines
 end
