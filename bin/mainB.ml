@@ -67,11 +67,13 @@ let update_game (game : game_state) =
       Graphics.clear_graph ();
       draw_state game;
       Graphics.synchronize ();
-      Unix.sleepf 0.03;
+      Unix.sleepf 0.1;
+      let game' = update_game game in
+      let ball = game'.ball in
       match Flux.uncons flux_etat with
       | None -> ()
       | Some (_, flux_etat') ->
-        let newGame = update_game game in
+        let newGame = {game' with ball = Ball.reflectBall ball } in
         loop newGame flux_etat'
 
   let draw game flux_etat =
