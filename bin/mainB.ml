@@ -83,7 +83,7 @@ let () =
   let coloRpadle = Graphics.black in
   let coloRball = Graphics.red in
   let paddleInit = Paddle.create (300.,60.) (90.,20.) coloRpadle in
-  let ballInit = Ball.create (300.,150.) 10. coloRball Normal (0.4,0.5) in
+  let ballInit = Ball.create (300.,150.) 5. coloRball Normal (0.4,0.5) in
   
   let initial_state : game_state = { bricks = Brick.generate_brick_lines posd posM coleR;
   paddle = paddleInit;
