@@ -6,8 +6,11 @@ module Ball = Dune__exe__Ball
 (** @canonical Dune__exe.Brick *)
 module Brick = Dune__exe__Brick
 
-(** @canonical Dune__exe.Iter *)
-module Iter = Dune__exe__Iter
+(** @canonical Dune__exe.Input *)
+module Input = Dune__exe__Input
+
+(** @canonical Dune__exe.Iterator *)
+module Iterator = Dune__exe__Iterator
 
 (** @canonical Dune__exe.MainB *)
 module MainB = Dune__exe__MainB

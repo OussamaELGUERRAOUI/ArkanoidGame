@@ -1,5 +1,7 @@
 open Graphics
 
+
+
 (*type state = Normal | Invincible *)
 module type Paddle =
 sig
@@ -32,6 +34,10 @@ sig
   val set_size : paddle -> (t * t) -> paddle
   (* Change la couleur du paddle *)
   val set_paddle_color : paddle -> color -> paddle
+
+  val set_x : paddle -> t -> paddle
+
+  val updatePadle : paddle -> (t*bool) -> paddle
   (* Change l'état du paddle *)
  (*val set_state : paddle -> state -> paddle*)
   (* Renvoie si la paddle est normal *)
@@ -68,6 +74,20 @@ struct
   (* Retourner l'etat de la paddle *)
  (** let is_normal (_, _, _, state) = state = Normal
   let is_invincible (_, _, _, state) = state = Invincible*)
+
+  (* Change la position du paddle *)
+  let set_x (position, size, color) new_x = ((new_x, snd position), size, color)
+
+  let updatePadle ((x, y),(width, height), color) (xs,buttonDown)  =
+    let new_x =
+      if buttonDown then
+        max 0. (min (xs -. (width /. 2.)) (float_of_int (size_x ()) -. width))
+      else x
+    in
+    ((new_x, y),(width, height), color)
+    
+                            
+    
 
   (* Dessine le paddle *)
   let draw ((x, y),(width, height), color) =

@@ -1,5 +1,5 @@
 
-open Iter
+open Iterator
 open Brick
 open Padle
 open Ball
@@ -47,8 +47,11 @@ let draw_state (state : game_state) =
 
   let update_game (game : game_state) =
     let ball =  game.ball in
+    let paddle = game.paddle in
     let new_ball = Ball.updateBall ball Init.dt in
-    { game with ball = new_ball}
+    let (x,_) = Graphics.mouse_pos () in
+    let new_paddle = Paddle.updatePadle paddle (float_of_int(x),true) in
+    { game with ball = new_ball ; paddle = new_paddle}
 
     
   let rec loop game flux_etat =
