@@ -1,0 +1,8 @@
+lib: [
+  "_build/install/default/lib/brick/META"
+  "_build/install/default/lib/brick/dune-package"
+  "_build/install/default/lib/brick/opam"
+]
+bin: [
+  "_build/install/default/bin/brick.exe"
+]
