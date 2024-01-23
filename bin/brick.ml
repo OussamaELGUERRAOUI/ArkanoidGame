@@ -26,6 +26,8 @@ sig
   val brickTocheese : (t * t) -> brick -> brick
   val update_brick_line : (t * t) -> brick list -> brick list
   val update_brick_lines : (t * t) -> brick list list -> brick list list
+
+  val nbBricks : brick list list -> int
 end
 
 module Brick : Brick =
@@ -102,4 +104,7 @@ struct
     
     let update_brick_lines (x,y) brick_lines =
       List.map (update_brick_line (x,y)) brick_lines
+
+    let nbBricks brick_lines =
+      List.fold_left (fun acc brick_line -> acc + List.length brick_line) 0 brick_lines
 end

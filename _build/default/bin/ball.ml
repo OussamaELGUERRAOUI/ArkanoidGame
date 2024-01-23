@@ -35,6 +35,9 @@ module type Ball = sig
   (* Renvoie la balle après le changement de vitesse *)
   val set_speed : ball -> (t * t) -> ball
 
+
+  
+
   val updateBall : ball -> t -> ball
 
 

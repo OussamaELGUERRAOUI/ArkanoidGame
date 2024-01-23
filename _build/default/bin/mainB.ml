@@ -29,6 +29,8 @@ type game_state = {
   ball : Ball.ball;
 }
 
+
+
 let draw_state (state : game_state) =
   let bricks, padle, ball = state.bricks, state.paddle, state.ball in
   (*let get_click_position () =
@@ -37,6 +39,9 @@ let draw_state (state : game_state) =
     
   let _, posM = get_click_position () in
   let new_brick = Brick.update_brick_lines posM bricks in *)
+  let score = Brick.nbBricks bricks in
+  Graphics.moveto 10 10;  (* Déplace le pointeur en bas à gauche *)
+  Graphics.draw_string ("Score: " ^ (string_of_int score));
   Brick.draw_brick_lines bricks;
   Paddle.draw padle;
   Ball.draw ball
