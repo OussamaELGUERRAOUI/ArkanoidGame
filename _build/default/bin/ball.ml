@@ -38,7 +38,7 @@ module type Ball = sig
 
   
 
-  val reflectBall : ball ->  ball
+  val reflectBall : ball -> (t * t) -> (t * t) -> ball
 
   val updateBall : ball -> t -> ball
 
@@ -71,11 +71,19 @@ module Ball : Ball with type t = float  = struct
  
   let set_speed (position, radius, color, state, _) newSpeed = (position, radius, color, state, newSpeed)
 
-  let reflectBall (position, radius, color, state, speed) = 
+  let reflectBall (position, radius, color, state, speed) (xp,yp) (width, height) = 
     let (x,y) = position in
     let (vx,vy) = speed in
-    let nx = if x <= 10. || x >= float_of_int (size_x () ) then -. vx else vx in
-    let ny = if y <= 10. || y >= float_of_int (size_y () ) then -. vy else vy in
+    let nx =   if (x >= float_of_int (size_x ())) || x <= 0.  then
+    -.vx
+  (*else if ( y <= yp +. height +. 10.) && (x >= 0.) then
+    if x <= (xp +. width) && x >= xp then
+      -.vx
+     else
+      vx*)
+  else
+    vx in
+    let ny = if (y <= (yp +. height) && x <= (xp +. width) && x >= xp)  || y >= float_of_int (size_y () ) then -. vy else vy in
     let newSpeed = (nx,ny) in
     (position, radius, color, state, newSpeed)
 

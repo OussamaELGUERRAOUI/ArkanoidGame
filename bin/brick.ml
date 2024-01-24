@@ -53,9 +53,9 @@ struct
   
     
 
-  let is_position_inside_brick (mouse_x, mouse_y) ((brick_x, brick_y), (brick_width, brick_height), _, _) =
-    mouse_x >= brick_x && mouse_x <= brick_x +. brick_width &&
-    mouse_y <= brick_y && mouse_y >= brick_y -. brick_height
+  let is_position_inside_brick (xb, yb) ((brick_x, brick_y), (brick_width, brick_height), _, _) =
+    xb >= brick_x && xb <= brick_x +. brick_width &&
+    yb <= brick_y && yb >= brick_y -. brick_height
 
   
 

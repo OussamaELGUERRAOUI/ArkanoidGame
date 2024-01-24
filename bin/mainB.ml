@@ -3,11 +3,17 @@ open Iterator
 open Brick
 open Padle
 open Ball
-(* Définir les modules Brick et Flux ici *)
 
-module Init = struct
-  let dt = 1000. /. 60. (* 60 Hz *)
-end
+
+
+
+(* Définition du type game *)
+type game_state = {
+  bricks : Brick.brick list list;
+  paddle : Paddle.paddle;
+  ball : Ball.ball;
+  score : int;
+}
 
 module Box = struct
   let marge = 10.
@@ -17,30 +23,46 @@ module Box = struct
   let supy = 590.
 end
 
+
+(* Initialisatioon du game*)
+module Init = struct
+  let dt = 1000. /. 60. (* 60 Hz *)
+  let posd = (50., 300.) 
+  let posM = (Box.supx , Box.supy )
+ 
+  
+  let coleR = Graphics.blue 
+  let coloRpadle = Graphics.black 
+  let coloRball = Graphics.red 
+  let paddleInit = Paddle.create (300.,60.) (90.,20.) coloRpadle 
+  let ballInit = Ball.create (300.,150.) 5. coloRball Normal (0.4,0.5) 
+  let bricksInt = Brick.generate_brick_lines posd posM coleR 
+  let scoreInit = Brick.nbBricks bricksInt 
+  
+  let initial_state : game_state = { bricks = bricksInt;
+  paddle = paddleInit;
+  ball = ballInit;
+  score = 0 } 
+end
 let graphic_format =
   Format.sprintf
     " %dx%d+50+50"
     (int_of_float ((2. *. Box.marge) +. Box.supx -. Box.infx))
     (int_of_float ((2. *. Box.marge) +. Box.supy -. Box.infy))
 
-type game_state = {
-  bricks : Brick.brick list list;
-  paddle : Paddle.paddle;
-  ball : Ball.ball;
-  score : int;
-}
+
 
 
 
 let draw_state (state : game_state) =
-  let bricks, padle, ball = state.bricks, state.paddle, state.ball in
+  let bricks, padle, ball, score = state.bricks, state.paddle, state.ball, state.score in
   (*let get_click_position () =
   let event = wait_next_event [Button_down] in
     (event.button,(float_of_int event.mouse_x, float_of_int event.mouse_y)) in
     
   let _, posM = get_click_position () in
   let new_brick = Brick.update_brick_lines posM bricks in *)
-  let score = state.score in
+  
   Graphics.moveto 10 10;  (* Déplace le pointeur en bas à gauche *)
   Graphics.draw_string ("Score: " ^ (string_of_int score));
   Brick.draw_brick_lines bricks;
@@ -58,8 +80,7 @@ let update_game (game : game_state) =
     let new_ball = Ball.updateBall ball Init.dt in
     let (x,_) = Graphics.mouse_pos () in
     let new_paddle = Paddle.updatePadle paddle (float_of_int(x),true) in
-    let subScore = Brick.nbBricks bricks - Brick.nbBricks new_bricks in
-    let new_score =  game.score + subScore in
+    let new_score =  Init.scoreInit - Brick.nbBricks new_bricks  in
     {  ball = new_ball ; paddle = new_paddle; bricks = new_bricks; score = new_score}
 
     
@@ -73,7 +94,9 @@ let update_game (game : game_state) =
       match Flux.uncons flux_etat with
       | None -> ()
       | Some (_, flux_etat') ->
-        let newGame = {game' with ball = Ball.reflectBall ball } in
+        let paddle = game'.paddle in
+        let pos, size = Paddle.get_position paddle, Paddle.get_size paddle in
+        let newGame = {game' with ball = Ball.reflectBall ball pos size } in
         loop newGame flux_etat'
 
   let draw game flux_etat =
@@ -86,21 +109,7 @@ let update_game (game : game_state) =
       
 
 let () =
-  let posd = (50., 300.) in
-  let posM = (Box.supx , Box.supy ) in
- 
-  
-  let coleR = Graphics.blue in
-  let coloRpadle = Graphics.black in
-  let coloRball = Graphics.red in
-  let paddleInit = Paddle.create (300.,60.) (90.,20.) coloRpadle in
-  let ballInit = Ball.create (300.,150.) 5. coloRball Normal (0.4,0.5) in
-  let scoreInit = 0 in
-  
-  let initial_state : game_state = { bricks = Brick.generate_brick_lines posd posM coleR;
-  paddle = paddleInit;
-  ball = ballInit;
-  score = scoreInit } in
+  let initial_state = Init.initial_state in
 
   let flux_etat = Flux.unfold (fun state -> Some (state, update_game state)) initial_state in
   
