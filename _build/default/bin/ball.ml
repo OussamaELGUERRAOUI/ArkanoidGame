@@ -1,4 +1,5 @@
 open Graphics
+open Brick
 
 (* Type de l'état de la balle *)
 type state = Normal | Lost
@@ -38,9 +39,32 @@ module type Ball = sig
 
   
 
-  val reflectBall : ball -> (t * t) -> (t * t) -> ball
+  val reflectBallPaddl : ball -> (t * t) -> (t * t) -> ball
+
+  val reflectBallBrick : ball -> Brick.brick list -> ball
+
+  val reflectBallBricks : ball -> Brick.brick list list -> ball
+
+  val isTouchedBrick : ball -> Brick.brick list -> bool
+
+  val isTouchingBricks : ball -> Brick.brick list list -> bool
+
+  val isTouchedpaddl : ball -> (t * t) -> (t * t) -> bool
+
+  val reflectSide : ball -> ball
+  
+
+  (* Renvoie la balle après le changement de position *)
 
   val updateBall : ball -> t -> ball
+
+  val reflectGeneral : ball -> Brick.brick list list -> (t * t) -> (t * t) -> ball
+
+  val isFinished : ball -> t-> t -> bool
+
+  
+
+  
 
 
   (* Dessine la balle *)
@@ -71,7 +95,7 @@ module Ball : Ball with type t = float  = struct
  
   let set_speed (position, radius, color, state, _) newSpeed = (position, radius, color, state, newSpeed)
 
-  let reflectBall (position, radius, color, state, speed) (xp,yp) (width, height) = 
+  let reflectBallPaddl (position, radius, color, state, speed) (xp,yp) (width, height) = 
     let (x,y) = position in
     let (vx,vy) = speed in
     let nx =   if (x >= float_of_int (size_x ())) || x <= 0.  then
@@ -88,6 +112,8 @@ module Ball : Ball with type t = float  = struct
     (position, radius, color, state, newSpeed)
 
   
+
+  
   let updateBall (position, radius, color, state, speed) dt =
     let (x,y) = position in
     let (vx,vy) = speed in
@@ -95,6 +121,84 @@ module Ball : Ball with type t = float  = struct
     let newY = y +. vy *. dt in
     let newPosition = (newX, newY) in
     (newPosition, radius, color, state, speed)
+
+  let rec reflectBallBrick (position, radius, color, state, speed) brickLine =
+    let (x,y) = position in
+    let (vx,vy) = speed in
+    match brickLine with
+    | [] -> (position, radius, color, state, speed)
+    | t :: q -> if (Brick.is_position_inside_brick (x,y) t) then
+        let newSpeed = (vx, -.vy) in
+        (position, radius, color, state, newSpeed)
+      else
+        reflectBallBrick (position, radius, color, state, speed) q
+
+  let reflectBallBricks (position, radius, color, state, speed) brickLine =
+    List.fold_left (fun acc x -> reflectBallBrick acc x) (position, radius, color, state, speed) brickLine
+
+
+  let rec isTouchedBrick (position, radius, color, state, speed) brickLine =
+    let (x,y) = position in
+    match brickLine with
+    | [] -> false
+    | t :: q -> if (Brick.is_position_inside_brick (x,y) t) then
+        true
+      else
+        isTouchedBrick (position, radius, color, state, speed) q
+
+  
+  let rec isTouchingBricks (position, radius, color, state, speed) brickLines =
+    match brickLines with
+    | [] -> false
+    | t :: q -> if isTouchedBrick (position, radius, color, state, speed) t then
+        true
+      else
+        isTouchingBricks (position, radius, color, state, speed) q
+
+  let isTouchedpaddl (position, _, _, _, _) (xp,yp) (width, height) =
+    let (x,y) = position in
+    if (y <= yp +. height +. 10.) && (x >= 0.) then
+      if x <= (xp +. width) && x >= xp then
+        true
+      else
+        false
+    else
+      false
+
+  let reflectSide (position, radius, color, state, speed) =
+    let (x,y) = position in
+    let (vx,vy) = speed in
+    let nx =   if (x >= float_of_int (size_x ())) || x <= 0.  then
+        -.vx
+      else
+        vx in
+    let ny = if y >= float_of_int (size_y () ) then -. vy else vy in
+    let newSpeed = (nx,ny) in
+    (position, radius, color, state, newSpeed)
+
+
+  let reflectGeneral (position, radius, color, state, speed) brickLines (xp,yp) (width, height) =
+
+    if isTouchedpaddl (position, radius, color, state, speed) (xp,yp) (width, height) then
+      reflectBallPaddl (position, radius, color, state, speed) (xp,yp) (width, height)
+    else if isTouchingBricks (position, radius, color, state, speed) brickLines then
+      reflectBallBricks (position, radius, color, state, speed) brickLines
+    else
+      reflectSide (position, radius, color, state, speed)
+
+  let isFinished ((_,y), _, _, _, _) yp height =
+    if (y <= yp -. height -. 10.) then
+      true
+    else
+      false
+
+
+  
+
+
+
+  
+  
     
 
     

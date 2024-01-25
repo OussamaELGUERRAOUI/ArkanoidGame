@@ -27,15 +27,15 @@ end
 (* Initialisatioon du game*)
 module Init = struct
   let dt = 1000. /. 60. (* 60 Hz *)
-  let posd = (50., 300.) 
-  let posM = (Box.supx , Box.supy )
+  let posd = (50., 330.) 
+  let posM = (Box.supx , Box.supy -. 60. )
  
   
-  let coleR = Graphics.blue 
+  let coleR = Graphics.yellow
   let coloRpadle = Graphics.black 
   let coloRball = Graphics.red 
   let paddleInit = Paddle.create (300.,60.) (90.,20.) coloRpadle 
-  let ballInit = Ball.create (300.,150.) 5. coloRball Normal (0.4,0.5) 
+  let ballInit = Ball.create (300.,150.) 5. coloRball Normal (0.5,0.6) 
   let bricksInt = Brick.generate_brick_lines posd posM coleR 
   let scoreInit = Brick.nbBricks bricksInt 
   
@@ -88,22 +88,37 @@ let update_game (game : game_state) =
       Graphics.clear_graph ();
       draw_state game;
       Graphics.synchronize ();
-      Unix.sleepf 0.1;
+      Unix.sleepf 0.04;
       let game' = update_game game in
       let ball = game'.ball in
+      let paddle = game'.paddle in
+      let pos, size = Paddle.get_position paddle, Paddle.get_size paddle in
+      let height = snd size in
+      let ypos = snd pos in
+      
       match Flux.uncons flux_etat with
       | None -> ()
       | Some (_, flux_etat') ->
         let paddle = game'.paddle in
-        let pos, size = Paddle.get_position paddle, Paddle.get_size paddle in
-        let newGame = {game' with ball = Ball.reflectBall ball pos size } in
-        loop newGame flux_etat'
+        let pos, size, brickLines = Paddle.get_position paddle, Paddle.get_size paddle, game'.bricks in
+        let newGame = {game' with ball = Ball.reflectGeneral ball brickLines  pos size } in
+        (if Ball.isFinished ball ypos height then
+      begin
+        Graphics.moveto 300 300;
+        Graphics.draw_string "Game Over";
+        Graphics.synchronize ();
+        Unix.sleepf 3.;
+        Graphics.close_graph ()
+      end
+    else
+        loop newGame flux_etat')
 
   let draw game flux_etat =
     Graphics.open_graph graphic_format;
-    Graphics.auto_synchronize false;
+    Graphics.auto_synchronize true;
     loop game flux_etat;
     Graphics.close_graph ()
+    
        
         
       

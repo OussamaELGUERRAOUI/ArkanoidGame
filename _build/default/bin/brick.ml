@@ -60,9 +60,9 @@ struct
   
 
   let generate_brick_line position_depart xmax color =
-    let space = 20. in
-    let width = 15.  in
-    let height = 7. in
+    let space = 35. in
+    let width = 20.  in
+    let height = 3. in
     
     
     let rec aux position  =
@@ -74,7 +74,7 @@ struct
     aux position_depart 
 
   let generate_brick_lines position_depart posMax color =
-    let space = 20. in
+    let space = 30. in
     let xmax, ymax = posMax in
     
     (*let height = snd position_fin -. snd position_depart in*)  

@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: "C:\\OCaml65\\home\\elgue\\ArkanoidGame"
 # Auto-detected concurrency: 8
-$ C:\OCaml65\home\elgue\.opam\4.14.0+mingw64c\bin\ocamlc.opt.exe -config > C:\OCaml65\tmp\dune_f7a69d_output
+$ C:\OCaml65\home\elgue\.opam\4.14.0+mingw64c\bin\ocamlc.opt.exe -config > C:\OCaml65\tmp\dune_962c61_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -132,6 +132,8 @@ $ C:\OCaml65\home\elgue\.opam\4.14.0+mingw64c\bin\ocamlc.opt.exe -config > C:\OC
 #      ; windows_unicode = true
 #      }
 #  }
-$ (cd _build/default && C:\OCaml65\home\elgue\.opam\4.14.0+mingw64c\bin\ocamldep.opt.exe -modules -impl bin/mainB.ml) > _build/default/bin/.mainB.eobjs/mainB.ml.d
+$ (cd _build/default && C:\OCaml65\home\elgue\.opam\4.14.0+mingw64c\bin\ocamldep.opt.exe -modules -impl bin/ball.ml) > _build/default/bin/.mainB.eobjs/ball.ml.d
+$ (cd _build/default && C:\OCaml65\home\elgue\.opam\4.14.0+mingw64c\bin\ocamlc.opt.exe -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I bin/.mainB.eobjs/byte -I C:\\OCaml65\\home\\elgue\\.opam\\4.14.0+mingw64c\lib\graphics -no-alias-deps -opaque -open Dune__exe -o bin/.mainB.eobjs/byte/dune__exe__Ball.cmo -c -impl bin/ball.ml)
+$ (cd _build/default && C:\OCaml65\home\elgue\.opam\4.14.0+mingw64c\bin\ocamlopt.opt.exe -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I bin/.mainB.eobjs/byte -I bin/.mainB.eobjs/native -I C:\\OCaml65\\home\\elgue\\.opam\\4.14.0+mingw64c\lib\graphics -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o bin/.mainB.eobjs/native/dune__exe__Ball.cmx -c -impl bin/ball.ml)
 $ (cd _build/default && C:\OCaml65\home\elgue\.opam\4.14.0+mingw64c\bin\ocamlopt.opt.exe -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I bin/.mainB.eobjs/byte -I bin/.mainB.eobjs/native -I C:\\OCaml65\\home\\elgue\\.opam\\4.14.0+mingw64c\lib\graphics -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o bin/.mainB.eobjs/native/dune__exe__MainB.cmx -c -impl bin/mainB.ml)
-$ (cd _build/default && C:\OCaml65\home\elgue\.opam\4.14.0+mingw64c\bin\ocamlopt.opt.exe -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -o bin/mainB.exe C:/OCaml65/home/elgue/.opam/4.14.0+mingw64c/lib/ocaml\unix.cmxa -I C:/OCaml65/home/elgue/.opam/4.14.0+mingw64c/lib/ocaml C:\\OCaml65\\home\\elgue\\.opam\\4.14.0+mingw64c\lib\graphics\graphics.cmxa -I C:\\OCaml65\\home\\elgue\\.opam\\4.14.0+mingw64c\lib\graphics bin/.mainB.eobjs/native/dune__exe.cmx bin/.mainB.eobjs/native/dune__exe__Ball.cmx bin/.mainB.eobjs/native/dune__exe__Brick.cmx bin/.mainB.eobjs/native/dune__exe__Iterator.cmx bin/.mainB.eobjs/native/dune__exe__Padle.cmx bin/.mainB.eobjs/native/dune__exe__MainB.cmx)
+$ (cd _build/default && C:\OCaml65\home\elgue\.opam\4.14.0+mingw64c\bin\ocamlopt.opt.exe -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -o bin/mainB.exe C:/OCaml65/home/elgue/.opam/4.14.0+mingw64c/lib/ocaml\unix.cmxa -I C:/OCaml65/home/elgue/.opam/4.14.0+mingw64c/lib/ocaml C:\\OCaml65\\home\\elgue\\.opam\\4.14.0+mingw64c\lib\graphics\graphics.cmxa -I C:\\OCaml65\\home\\elgue\\.opam\\4.14.0+mingw64c\lib\graphics bin/.mainB.eobjs/native/dune__exe.cmx bin/.mainB.eobjs/native/dune__exe__Brick.cmx bin/.mainB.eobjs/native/dune__exe__Ball.cmx bin/.mainB.eobjs/native/dune__exe__Iterator.cmx bin/.mainB.eobjs/native/dune__exe__Padle.cmx bin/.mainB.eobjs/native/dune__exe__MainB.cmx)
