@@ -3,9 +3,6 @@ lib: [
   "_build/install/default/lib/brick/dune-package"
   "_build/install/default/lib/brick/opam"
 ]
-bin: [
-  "_build/install/default/bin/brick.exe"
-]
 doc: [
   "_build/install/default/doc/brick/README.md"
 ]

@@ -1,2 +1,6 @@
 (library
- (name brick))
+ (name libnewtonoid)
+ (libraries unix graphics)
+ (inline_tests)
+ (preprocess
+  (pps ppx_inline_test)))

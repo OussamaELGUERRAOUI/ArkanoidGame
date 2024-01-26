@@ -1,4 +1,3 @@
 (executable
- (public_name brick)
- (name mainB)
- (libraries unix graphics))
+ (name newtonoid)
+ (libraries libnewtonoid))
